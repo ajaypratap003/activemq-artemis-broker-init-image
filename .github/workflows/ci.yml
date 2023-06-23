@@ -61,7 +61,7 @@ jobs:
         
       - name: Login to image repository quay.io
         # Only login if not a PR, as PRs only trigger a Docker build and not a push
-        if: ${{ github.event_name != 'pull_request' }}
+#         if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@v2
         with:
           registry: quay.io
@@ -78,14 +78,14 @@ jobs:
           platforms: linux/amd64${{github.event_name!='pull_request' && ',linux/arm64' || ''}}
 #           push: ${{ github.event_name == 'push' }}
           push: false
-          tags: ${{ env.QUAY_NAMESPACE }}/${{env.IMAGE_NAME}}:dev.latest, ${{ env.QUAY_NAMESPACE }}/${{env.IMAGE_NAME}}:dev.${{ steps.vars.outputs.date }}.${{ steps.vars.outputs.sha_short }}
+          tags: ajaypratap1234/${{env.IMAGE_NAME}}:dev.latest, ajaypratap1234/${{env.IMAGE_NAME}}:dev.${{ steps.vars.outputs.date }}.${{ steps.vars.outputs.sha_short }}
           labels: |
             quay.expires-after=90d
             git-sha=$GITHUB_SHA
 
       - name: Check the image
         run: >
-         podman run ${{env.QUAY_NAMESPACE}}/$IMAGE_NAME:dev.latest yacfg --profile artemis/2.15.0/default_with_user_address_settings.yaml.jinja2
+         podman run ajaypratap1234/$IMAGE_NAME:dev.latest yacfg --profile artemis/2.15.0/default_with_user_address_settings.yaml.jinja2
 
       - name: Push the snapshot image
         if: ${{ github.event_name == 'schedule' || inputs.snapshot }}
