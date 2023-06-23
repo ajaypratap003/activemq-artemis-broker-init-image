@@ -1,6 +1,6 @@
 name: CI
 
-env: |
+env:
   IMAGE_NAME: activemq-artemis-broker-init
   QUAY_NAMESPACE: ajaypratap1234
 
