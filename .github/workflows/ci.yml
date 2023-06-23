@@ -82,7 +82,7 @@ jobs:
             git-sha=$GITHUB_SHA
 
       - name: Check the image
-        run: docker run $IMAGE_NAME:dev.latest yacfg --profile artemis/2.15.0/default_with_user_address_settings.yaml.jinja2
+        run: podman run $IMAGE_NAME:dev.latest yacfg --profile artemis/2.15.0/default_with_user_address_settings.yaml.jinja2
 
       - name: Push the snapshot image
         if: ${{ github.event_name == 'schedule' || inputs.snapshot }}
