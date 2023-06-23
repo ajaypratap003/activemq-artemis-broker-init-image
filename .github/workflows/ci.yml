@@ -76,14 +76,16 @@ jobs:
           # If this is a PR, we only build for AMD64. For PRs we only do a sanity check test to ensure Docker builds  work.
           # If this is not a PR (e.g. a tag or merge commit), also build for ARM64
           platforms: linux/amd64${{github.event_name!='pull_request' && ',linux/arm64' || ''}}
-          push: ${{ github.event_name == 'push' }}
+#           push: ${{ github.event_name == 'push' }}
+          push: true
           tags: ${{ env.QUAY_NAMESPACE }}/${{env.IMAGE_NAME}}:dev.latest, ${{ env.QUAY_NAMESPACE }}/${{env.IMAGE_NAME}}:dev.${{ steps.vars.outputs.date }}.${{ steps.vars.outputs.sha_short }}
           labels: |
             quay.expires-after=90d
             git-sha=$GITHUB_SHA
 
       - name: Check the image
-        run: podman run $IMAGE_NAME:dev.latest yacfg --profile artemis/2.15.0/default_with_user_address_settings.yaml.jinja2
+        run: >
+         podman run ${{env.QUAY_NAMESPACE}}/$IMAGE_NAME:dev.latest yacfg --profile artemis/2.15.0/default_with_user_address_settings.yaml.jinja2
 
       - name: Push the snapshot image
         if: ${{ github.event_name == 'schedule' || inputs.snapshot }}
